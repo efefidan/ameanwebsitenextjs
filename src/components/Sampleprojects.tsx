@@ -10,7 +10,7 @@ const SampleProjects = () => {
     infinite: true, // Sonsuz döngü
     speed: 500, // Kaydırma d
     slidesToShow: 5, // Aynı anda gösterilecek logo sayısı
-    slidesToScroll: 5, // Her kaydırmada geçilecek logo sayısı
+    slidesToScroll: 1, // Her kaydırmada geçilecek logo sayısı
     customPaging: () => (
       <div className="w-2 h-2 bg-gray-300 rounded-full hover:bg-[#140342] transition cursor-pointer"></div>
     ),
@@ -31,7 +31,7 @@ const SampleProjects = () => {
 
   return (
     <div className="py-12 bg-white">
-      <div className="container mx-auto text-center">
+      <div className="container mx-auto text-center text-sm">
         {/* Başlık */}
         <h2 className="text-4xl font-bold text-[#140342]">Örnek Projelerimiz</h2>
         <p className="text-gray-600 mt-4">
