@@ -4,7 +4,7 @@ import React from "react";
 
 const SoftwareServices = () => {
   return (
-    <div className="bg-[#F9FAFB] py-12">
+    <div className="bg-[#EEF2F6] py-12">
       <div className="container mx-auto flex flex-wrap lg:flex-nowrap items-center gap-8 px-4">
         {/* Görsel Alanı */}
         <div className="w-full lg:w-2/3 flex justify-center">

@@ -7,6 +7,7 @@ import FeedbackSection from "@/components/FeedbackSection";
 import ProcessSection from "@/components/ProcessSection";
 import TeamSection from "@/components/TeamSection";
 import SoftwareServices from "@/components/SoftwareServices";
+import UpcomingEvents from "@/components/UpcomingEvents";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
       <ProcessSection/>
       <TeamSection/>
       <SoftwareServices/>
+      <UpcomingEvents/>
     </div>
   );
 }
