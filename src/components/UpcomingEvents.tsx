@@ -8,10 +8,10 @@ const UpcomingEvents = () => {
     <div className="bg-[#F7F8FB] py-12">
       <div className="container mx-auto px-4">
         {/* Başlık ve Açıklama */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-20">
           <div>
             <h2 className="text-3xl font-bold text-[#140342]">Yaklaşan Eğitim & Etkinlikler</h2>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-sm py-2">
               Canlı yayın üzerinden veya fiziksel olarak farklı üniversite ve mekanlarda verdiğimiz eğitimlere katılın!
             </p>
           </div>

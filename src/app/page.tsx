@@ -8,6 +8,8 @@ import ProcessSection from "@/components/ProcessSection";
 import TeamSection from "@/components/TeamSection";
 import SoftwareServices from "@/components/SoftwareServices";
 import UpcomingEvents from "@/components/UpcomingEvents";
+import BlogSection from "@/components/BlogSection";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -21,6 +23,8 @@ export default function Home() {
       <TeamSection/>
       <SoftwareServices/>
       <UpcomingEvents/>
+      <BlogSection/>
+      <Footer/>
     </div>
   );
 }
