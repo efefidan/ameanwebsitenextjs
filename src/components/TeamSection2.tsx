@@ -31,7 +31,7 @@ const teamMembers: TeamMember[] = [
     rating: 0.0,
     students: 0,
     courses: 0,
-    image: "/placeholder-avatar.jpg",
+    image: "/seoresim.jpeg",
   },
 ];
 
@@ -46,22 +46,6 @@ const TeamSection = () => {
   return (
     <div className="py-12 bg-white">
       <div className="container mx-auto px-4">
-        {/* Başlık */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h2 className="text-3xl font-bold text-[#140342]">Ekibimiz</h2>
-            <p className="text-gray-600 text-sm">
-              Tecrübeli ve profesyonel ekibimizi tanıyın.
-            </p>
-          </div>
-          <a
-            href="/ekibimiz"
-            className="bg-[#F4F0FF] text-[#6440FB] px-6 py-3 rounded-lg text-base font-semibold hover:bg-[#6440FB] hover:text-white transition-all duration-300"
-          >
-            Tüm Ekip
-          </a>
-        </div>
-
         <div className="flex items-center justify-start space-x-4 overflow-x-auto w-full py-4">
           {/* Kartlar */}
           {teamMembers.map((member) => (
@@ -81,14 +65,6 @@ const TeamSection = () => {
             </div>
           ))}
         </div>
-
-        {/* Alt Metin */}
-        <p className="mt-8 text-center text-sm text-gray-600">
-          Alanında uzman bir yazılımcı olarak ekibimizde katılmak ister misiniz?{" "}
-          <a href="#" className="text-[#6440FB] font-medium hover:underline">
-            Ekibe Katıl
-          </a>
-        </p>
       </div>
     </div>
   );
