@@ -1,26 +1,53 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import BlogCard from "./BlogCard";
+import { useRouter } from "next/navigation";
 
 const BlogSection = () => {
-  const blogs = [
-    { category: "Hizmetlerimiz", title: "Pazarlama Danışmanlığı", date: "Temmuz 4, 2024" },
-    { category: "Hizmetlerimiz", title: "Emlak Danışmanlığı", date: "Temmuz 4, 2024" },
-    { category: "Hizmetlerimiz", title: "Eğitim Koçluğu", date: "Temmuz 4, 2024" },
-    { category: "Hizmetlerimiz", title: "Pazarlama Danışmanlığı", date: "Temmuz 4, 2024" },
-    { category: "Hizmetlerimiz", title: "Pazarlama Danışmanlığı", date: "Temmuz 4, 2024" },
-    { category: "Hizmetlerimiz", title: "Pazarlama Danışmanlığı", date: "Temmuz 4, 2024" },
-  ];
-
+  const router = useRouter();
+  const [blogs, setBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(0); // Mevcut sayfa
-  const itemsPerPage = 3; // Her sayfada 3 kart göster
+  const itemsPerPage = 3; // Her slaytta maksimum 3 blog göster
 
-  const totalPages = Math.ceil(blogs.length / itemsPerPage);
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:1337/api/blogs?populate=*"
+        ); // Strapi API URL'i
+        const fetchedBlogs = response.data.data.map((blog) => ({
+          id: blog.id,
+          title: blog.Title,
+          summary: blog.Summary,
+          date: new Date(blog.updatedAt).toLocaleDateString("tr-TR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+          slug: blog.slug, // Slug bilgisini ekle
+        }));
+        setBlogs(fetchedBlogs);
+      } catch (error) {
+        console.error("Blogları çekerken bir hata oluştu:", error);
+      }
+    };
 
-  const handlePageChange = (index: number) => {
+    fetchBlogs();
+  }, []);
+
+  const handlePageChange = (index) => {
     setCurrentPage(index);
   };
+
+  // Blogları sayfalara bölme
+  const totalPages = Math.ceil(blogs.length / itemsPerPage);
+  const paginatedBlogs = Array.from({ length: totalPages }, (_, index) => {
+    const start = index * itemsPerPage;
+    const end = Math.min(start + itemsPerPage, blogs.length); // Kalanları da hesaba kat
+    return blogs.slice(start, end);
+  });
 
   return (
     <div className="py-12 bg-white">
@@ -28,18 +55,20 @@ const BlogSection = () => {
         {/* Başlık ve Açıklama */}
         <div className="flex justify-between items-center mb-12">
           <div>
-            <h2 className="text-3xl font-bold text-[#140342]">Blog & Haberler</h2>
+            <h2 className="text-3xl font-bold text-[#140342]">
+              Blog & Haberler
+            </h2>
             <p className="text-sm text-gray-600 py-2">
-              Yazılım, Tasarım ve Eğitim alanlarındaki işinize yarayacak gelişmelerden
-              haberdar olun.
+              Yazılım, Tasarım ve Eğitim alanlarındaki işinize yarayacak
+              gelişmelerden haberdar olun.
             </p>
           </div>
-          <a
-            href="#"
+          <button
+            onClick={() => router.push("/blog")}
             className="bg-[#F4F0FF] text-[#6440FB] px-6 py-3 rounded-lg text-base font-semibold hover:bg-[#6440FB] hover:text-white transition-all duration-300"
           >
             Tüm Haberler
-          </a>
+          </button>
         </div>
 
         {/* Blog Kartları */}
@@ -51,17 +80,43 @@ const BlogSection = () => {
               width: `${100 * totalPages}%`,
             }}
           >
-            {blogs.map((blog, index) => (
+            {paginatedBlogs.map((page, pageIndex) => (
               <div
-                key={index}
-                className="w-1/3 flex-shrink-0 px-4"
-                style={{ flex: "0 0 33.3333%", maxWidth: "33.3333%" }}
+                key={pageIndex}
+                className="flex w-full"
+                style={{
+                  flex: "0 0 100%",
+                  maxWidth: "100%",
+                }}
               >
-                <BlogCard
-                  category={blog.category}
-                  title={blog.title}
-                  date={blog.date}
-                />
+                {page.map((blog) => (
+                  <div
+                    key={blog.id}
+                    className="w-full sm:w-1/2 lg:w-1/3 px-4"
+                    style={{
+                      flex: "w-1/3",
+                      maxWidth: "w-1/3",
+                    }}
+                  >
+                    <div
+                      key={blog.id}
+                      className="cursor-pointer p-0"
+                      onClick={() => router.push(`/blog/${blog.slug}`)}
+                    >
+                      <BlogCard
+                        category="Kategori (Yapılacak)" // İstersen bu değeri dinamik hale getirebilirsin
+                        title={blog.title}
+                        date={blog.date}
+                      />
+                      <p className="text-gray-500 text-sm mt-2 break-words">
+                        {blog.summary}
+                      </p>
+                      <span className="text-sm text-gray-400 mt-1 block">
+                        Son Güncelleme: {blog.date}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>

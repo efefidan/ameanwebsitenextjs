@@ -15,7 +15,6 @@ const BlogCard: React.FC<BlogCardProps> = ({ category, title, date }) => {
         {category}
       </span>
       <h3 className="text-lg font-bold text-[#140342] mb-2">{title}</h3>
-      <span className="text-sm text-gray-500">{date}</span>
     </div>
   );
 };
