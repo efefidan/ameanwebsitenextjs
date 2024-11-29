@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 type EventCardProps = {
   date: string;
@@ -48,4 +49,45 @@ const EventCard: React.FC<EventCardProps> = ({ date, month, title, location }) =
   );
 };
 
-export default EventCard;
+const Events = () => {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get("http://localhost:1337/api/events?populate=*");
+        const fetchedEvents = response.data.data.map((event: any) => ({
+          id: event.id,
+          title: event.title,
+          location: event.location,
+          date: new Date(event.date),
+        }));
+        setEvents(fetchedEvents);
+      } catch (error) {
+        console.error("Etkinlik verileri alınırken hata oluştu:", error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  return (
+    <div className=" bg-gray-50">
+      <div className="container mx-auto ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.map((event) => (
+            <EventCard
+              key={event.id}
+              title={event.title}
+              location={event.location}
+              date={event.date.getDate().toString()}
+              month={event.date.toLocaleString("en-US", { month: "short" }).toUpperCase()}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Events;

@@ -1,46 +1,37 @@
 "use client";
 
-import TeamMemberCard from "./TeamMemberCard";
-import React from "react";
-import { useRouter } from "next/navigation"; // Next.js router kullanımı için
-
-type TeamMember = {
-  id: string; // Profil ID'si
-  name: string;
-  role: string;
-  rating: number;
-  students: number;
-  courses: number;
-  image: string;
-};
-
-const teamMembers: TeamMember[] = [
-  {
-    id: "1", // Profil ID
-    name: "Emin Kartcı",
-    role: "Proje Yöneticisi",
-    rating: 4.4,
-    students: 50,
-    courses: 15,
-    image: "/seoresim.jpeg",
-  },
-  {
-    id: "2", // Profil ID
-    name: "Umut Arslan",
-    role: "Yazılım Uzmanı",
-    rating: 0.0,
-    students: 0,
-    courses: 0,
-    image: "/placeholder-avatar.jpg",
-  },
-];
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const TeamSection = () => {
-  const router = useRouter(); // Router'ı başlatıyoruz
+  const [users, setUsers] = useState([]);
+  const router = useRouter();
 
-  const handleCardClick = (id: string) => {
-    // İlgili profile yönlendirme
-    router.push(`/ekibimiz/${id}`); // `/team/:id` şeklinde bir sayfaya yönlendirir
+  // Kullanıcı verilerini Strapi'den çekme
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:1337/api/users?populate=*" // Strapi API endpoint
+        );
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Kullanıcıları çekerken hata oluştu:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  // Yalnızca "Authenticated" kullanıcıları filtreleme
+  const authenticatedUsers = users.filter(
+    (user) => user.role?.name === "Authenticated"
+  );
+
+  const handleCardClick = (id: number) => {
+    // Profil sayfasına yönlendirme
+    router.push(`/ekibimiz/${id}`);
   };
 
   return (
@@ -63,21 +54,85 @@ const TeamSection = () => {
         </div>
 
         <div className="flex items-center justify-start space-x-4 overflow-x-auto w-full py-4">
-          {/* Kartlar */}
-          {teamMembers.map((member) => (
+          {/* Kullanıcı Kartları */}
+          {authenticatedUsers.map((user) => (
             <div
-              key={member.id}
-              onClick={() => handleCardClick(member.id)} // Kart tıklanınca yönlendirme yapılır
+              key={user.id}
+              onClick={() => handleCardClick(user.id)} // Kart tıklanınca yönlendirme yapılır
               className="cursor-pointer"
             >
-              <TeamMemberCard
-                image={member.image}
-                name={member.name}
-                role={member.role}
-                rating={member.rating}
-                students={member.students}
-                courses={member.courses}
-              />
+              <div className="flex flex-col">
+                {/* Avatar */}
+                <div className="w-[300px] h-[200px] overflow-hidden rounded-lg">
+                  <img
+                    src={`http://localhost:1337${user.avatar?.url}`} // Strapi'den tam URL oluşturulması
+                    alt={user.username}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
+
+                {/* Kullanıcı Bilgileri */}
+                <div className="mt-4">
+                  <h3 className="text-lg font-bold text-[#140342]">
+                    {user.username}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {user.title || "Unvan Belirtilmemiş"}
+                  </p>
+
+                  {/* Sabit Detaylar */}
+                  <div className="flex items-center gap-4 mt-4 text-sm text-gray-600">
+                    {/* Rating */}
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 text-yellow-400 mr-1"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                      </svg>
+                      4.5
+                    </div>
+                    {/* Öğrenciler */}
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 text-[#140342] mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16 16V14a4 4 0 00-8 0v2m8 0h2a2 2 0 012 2v4H4v-4a2 2 0 012-2h2m8 0V14m-4-6a4 4 0 110-8 4 4 0 010 8z"
+                        />
+                      </svg>
+                      25 Students
+                    </div>
+                    {/* Kurslar */}
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 text-[#140342] mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12h6M9 12H6a2 2 0 01-2-2m5 0V9a2 2 0 112 2m-7 0a2 2 0 014 0m2 0v3m-3-3a2 2 0 114 0"
+                        />
+                      </svg>
+                      5 Courses
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
         </div>

@@ -3,8 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-
-
+import Breadcrumb from "@/components/BreadCrumb"; // Breadcrumb bileşeninin yolunuza göre güncelleyin
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,7 +32,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-        {children}
+
+        {/* Breadcrumb sadece ana sayfa dışında görünecek */}
+        <Breadcrumb />
+
+        {/* Sayfa içeriği */}
+        <main>{children}</main>
+
         <Footer />
       </body>
     </html>
