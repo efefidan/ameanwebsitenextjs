@@ -101,14 +101,7 @@ const TeamProfile = () => {
             ?.split(",")
             .map((item: string, index: number) => (
               <li key={index} className="flex items-start space-x-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 text-[#6440FB]"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
-                </svg>
+                
                 <span>{item.trim()}</span>
               </li>
             ))}
