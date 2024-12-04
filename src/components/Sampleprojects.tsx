@@ -1,14 +1,16 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import Image from "next/image";
 
 const SampleProjects = () => {
+  const [logos, setLogos] = useState([]);
+
   // Slider ayarları
   const settings = {
     dots: true, // Alt noktalar görünsün
     infinite: true, // Sonsuz döngü
-    speed: 500, // Kaydırma d
+    speed: 500, // Kaydırma hızı
     slidesToShow: 5, // Aynı anda gösterilecek logo sayısı
     slidesToScroll: 1, // Her kaydırmada geçilecek logo sayısı
     customPaging: () => (
@@ -18,16 +20,26 @@ const SampleProjects = () => {
     initialSlide: 0, // Sayfa ilk yüklendiğinde birinci nokta seçili olsun
   };
 
-  // Logolar
-  const logos = [
-    "/bülübl.png",
-    "/yalım.png",
-    "/doralp.png",
-    "/gna.png",
-    "/ilgin.png",
-    "/minerva.png",
-    "/platin.png",
-  ];
+  // Strapi'den logoları çekme
+  useEffect(() => {
+    const fetchLogos = async () => {
+      try {
+        const response = await fetch("http://localhost:1337/api/referances?populate=*");
+        const data = await response.json();
+
+        // Logoları ayıkla
+        const fetchedLogos = data.data.map((referances: { image: { url: any; }; }) => {
+          return `http://localhost:1337${referances.image.url}`; // Tam URL'yi oluştur
+        });
+
+        setLogos(fetchedLogos);
+      } catch (error) {
+        console.error("Projeleri çekerken bir hata oluştu:", error);
+      }
+    };
+
+    fetchLogos();
+  }, []);
 
   return (
     <div className="py-12 bg-white">
@@ -39,20 +51,22 @@ const SampleProjects = () => {
         </p>
 
         {/* Slider */}
-        <div className="mt-8">
-          <Slider {...settings}>
-            {logos.map((logo, index) => (
-              <div key={index} className="px-4">
-                <Image
-                  src={logo}
-                  alt={`Logo ${index + 1}`}
-                  width={250} // Fotoğraf boyutları büyütüldü
-                  height={250}
-                  className="mx-auto object-contain"
-                />
-              </div>
-            ))}
-          </Slider>
+        <div className="">
+          {logos.length > 0 ? (
+            <Slider {...settings}>
+              {logos.map((logo, index) => (
+                <div key={index} className="">
+                  <img
+                    src={logo}
+                    alt={`Logo ${index + 1}`}
+                    className="mx-auto object-contain w-[250px] h-[250px]" // Resimlerin boyutlarını ayarla
+                  />
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            <p className="text-gray-500">Yükleniyor...</p>
+          )}
         </div>
       </div>
     </div>
