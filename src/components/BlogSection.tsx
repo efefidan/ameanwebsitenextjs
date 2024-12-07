@@ -9,7 +9,8 @@ const BlogSection = () => {
   const router = useRouter();
   const [blogs, setBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(0); // Mevcut sayfa
-  const itemsPerPage = 3; // Her slaytta maksimum 3 blog göster
+  const itemsPerPage = 3; // Masaüstünde maksimum 3 blog göster
+  const itemsPerPageMobile = 1; // Mobilde 1 blog göster
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -42,18 +43,24 @@ const BlogSection = () => {
   };
 
   // Blogları sayfalara bölme
-  const totalPages = Math.ceil(blogs.length / itemsPerPage);
-  const paginatedBlogs = Array.from({ length: totalPages }, (_, index) => {
-    const start = index * itemsPerPage;
-    const end = Math.min(start + itemsPerPage, blogs.length); // Kalanları da hesaba kat
-    return blogs.slice(start, end);
-  });
+  const totalPagesDesktop = Math.ceil(blogs.length / itemsPerPage);
+  const totalPagesMobile = Math.ceil(blogs.length / itemsPerPageMobile);
+  const paginatedBlogs = Array.from(
+    { length: window.innerWidth <= 768 ? totalPagesMobile : totalPagesDesktop },
+    (_, index) => {
+      const itemsPerPageDynamic =
+        window.innerWidth <= 768 ? itemsPerPageMobile : itemsPerPage;
+      const start = index * itemsPerPageDynamic;
+      const end = Math.min(start + itemsPerPageDynamic, blogs.length); // Kalanları da hesaba kat
+      return blogs.slice(start, end);
+    }
+  );
 
   return (
     <div className="py-12 bg-white">
       <div className="container mx-auto px-4">
         {/* Başlık ve Açıklama */}
-        <div className="flex justify-between items-center mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 space-y-4 md:space-y-0">
           <div>
             <h2 className="text-3xl font-bold text-[#140342]">
               Blog & Haberler
@@ -65,7 +72,7 @@ const BlogSection = () => {
           </div>
           <button
             onClick={() => router.push("/blog")}
-            className="bg-[#F4F0FF] text-[#6440FB] px-6 py-3 rounded-lg text-base font-semibold hover:bg-[#6440FB] hover:text-white transition-all duration-300"
+            className="bg-[#F4F0FF] text-[#6440FB] px-6 py-3 rounded-lg text-base font-semibold hover:bg-[#6440FB] hover:text-white transition-all duration-300 self-start md:self-auto"
           >
             Tüm Haberler
           </button>
@@ -77,7 +84,7 @@ const BlogSection = () => {
             className="flex transition-transform duration-500 ease-in-out"
             style={{
               transform: `translateX(-${currentPage * 100}%)`,
-              width: `${100 * totalPages}%`,
+              width: `${100 * paginatedBlogs.length}%`,
             }}
           >
             {paginatedBlogs.map((page, pageIndex) => (
@@ -92,10 +99,10 @@ const BlogSection = () => {
                 {page.map((blog) => (
                   <div
                     key={blog.id}
-                    className="w-full sm:w-1/2 lg:w-1/3 px-4"
+                    className="w-full px-4"
                     style={{
-                      flex: "w-1/3",
-                      maxWidth: "w-1/3",
+                      flex: "1 1 auto",
+                      maxWidth: "100%",
                     }}
                   >
                     <div
@@ -124,7 +131,9 @@ const BlogSection = () => {
 
         {/* Noktalar */}
         <div className="mt-8 flex justify-center items-center space-x-4">
-          {Array.from({ length: totalPages }).map((_, index) => (
+          {Array.from({
+            length: window.innerWidth <= 768 ? totalPagesMobile : totalPagesDesktop,
+          }).map((_, index) => (
             <button
               key={index}
               onClick={() => handlePageChange(index)}
