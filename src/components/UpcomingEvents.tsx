@@ -16,7 +16,7 @@ const UpcomingEvents = () => {
             </p>
           </div>
           <a
-            href="#"
+            href="/dashboard/event"
             className="bg-[#F4F0FF] text-[#6440FB] px-6 py-3 rounded-lg text-base font-semibold hover:bg-[#6440FB] hover:text-white transition-all duration-300"
           >
             Etkinlik Ara

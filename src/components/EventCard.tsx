@@ -2,16 +2,20 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
+
 
 type EventCardProps = {
   date: string;
   month: string;
   title: string;
   location: string;
+  id: number; // ID'yi ekliyoruz
 };
 
-const EventCard: React.FC<EventCardProps> = ({ date, month, title, location }) => {
+const EventCard: React.FC<EventCardProps> = ({ date, month, title, location, id }) => {
   return (
+    <Link href={`/dashboard/event/${id}`}>
     <div className="bg-white rounded-lg shadow-md p-4 w-64">
       {/* Tarih ve Başlık */}
       <div className="flex items-center gap-4 mb-4">
@@ -46,6 +50,7 @@ const EventCard: React.FC<EventCardProps> = ({ date, month, title, location }) =
         {location}
       </div>
     </div>
+    </Link>
   );
 };
 
@@ -72,12 +77,13 @@ const Events = () => {
   }, []);
 
   return (
-    <div className=" bg-gray-50">
-      <div className="container mx-auto ">
+    <div className="bg-gray-50">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
             <EventCard
               key={event.id}
+              id={event.id}
               title={event.title}
               location={event.location}
               date={event.date.getDate().toString()}
@@ -91,3 +97,4 @@ const Events = () => {
 };
 
 export default Events;
+

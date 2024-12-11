@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Breadcrumb from "@/components/BreadCrumb"; // Breadcrumb bileşeninin yolunuza göre güncelleyin
 
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",

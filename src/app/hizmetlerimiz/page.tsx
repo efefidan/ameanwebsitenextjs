@@ -63,7 +63,7 @@ const Page: React.FC = () => {
                   {project.project_category?.name || "Uncategorized"}
                 </span>
                 <span>•</span>
-                <span>BY {project.users_permissions_user.username}</span>
+                 <span>BY {project.users_permissions_user.username}</span> 
                 <span>•</span>
                 <span>{getFormattedDate(project.createdAt)}</span>
               </div>
@@ -88,7 +88,7 @@ const Page: React.FC = () => {
                   {project.project_category?.name || "Uncategorized"}
                 </span>
                 <span>•</span>
-                <span>BY {project.users_permissions_user.username}</span>
+                <span>BY {project.users_permissions_user.username}</span> 
               </div>
               <h3 className="text-base font-semibold mt-2">{project.title}</h3>
             </div>
