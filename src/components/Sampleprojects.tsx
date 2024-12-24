@@ -11,13 +11,21 @@ const SampleProjects = () => {
     dots: true, // Alt noktalar görünsün
     infinite: true, // Sonsuz döngü
     speed: 500, // Kaydırma hızı
-    slidesToShow: 5, // Aynı anda gösterilecek logo sayısı
+    slidesToShow: 5, // Masaüstünde gösterilecek logo sayısı
     slidesToScroll: 1, // Her kaydırmada geçilecek logo sayısı
     customPaging: () => (
       <div className="w-2 h-2 bg-gray-300 rounded-full hover:bg-[#140342] transition cursor-pointer"></div>
     ),
     dotsClass: "slick-dots custom-dots", // Özel nokta tasarımı için sınıf
     initialSlide: 0, // Sayfa ilk yüklendiğinde birinci nokta seçili olsun
+    responsive: [
+      {
+        breakpoint: 768, // Mobil cihazlar için
+        settings: {
+          slidesToShow: 1, // Her seferinde sadece 1 öğe göster
+        },
+      },
+    ],
   };
 
   // Strapi'den logoları çekme
@@ -28,7 +36,7 @@ const SampleProjects = () => {
         const data = await response.json();
 
         // Logoları ayıkla
-        const fetchedLogos = data.data.map((referances: { image: { url: any; }; }) => {
+        const fetchedLogos = data.data.map((referances: { image: { url: any } }) => {
           return `http://localhost:1337${referances.image.url}`; // Tam URL'yi oluştur
         });
 

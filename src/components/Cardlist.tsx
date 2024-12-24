@@ -26,18 +26,18 @@ const Card: React.FC<CardProps> = ({
   authorAvatar,
 }) => {
   return (
-    <div className="flex h-[210px] border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white group p-2 ">
+    <div className="flex flex-col sm:flex-row h-auto sm:h-[210px] border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white group p-2">
+      {" "}
       {/* Sol Resim */}
-      <div className="w-2/5 h-full overflow-hidden relative rounded-md">
+      <div className="w-full sm:w-2/5 h-52 sm:h-full overflow-hidden relative rounded-md">
         <img
           src={image}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-125 group-hover:brightness-50"
         />
       </div>
-
       {/* Sağ İçerik */}
-      <div className="w-3/5 p-6 flex flex-col justify-between">
+      <div className="w-full sm:w-3/5 p-4 flex flex-col justify-between">
         <div>
           {/* Değerlendirme */}
           <div className="flex items-center text-yellow-400 text-sm mb-2">
@@ -65,7 +65,9 @@ const Card: React.FC<CardProps> = ({
           </div>
 
           {/* Başlık */}
-          <h3 className="text-sm font-semibold text-[#140342] mb-3">{title}</h3>
+          <h3 className="text-sm font-semibold text-[#140342] mb-3 ">
+            {title}
+          </h3>
 
           {/* Detaylar */}
           <div className="flex items-center text-gray-600 text-xs">
@@ -82,7 +84,7 @@ const Card: React.FC<CardProps> = ({
         </div>
 
         {/* Alt Kısım */}
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center justify-between mt-4 ">
           {/* Yazar */}
           <div className="flex items-center">
             <img
@@ -93,7 +95,9 @@ const Card: React.FC<CardProps> = ({
             <span className="ml-2 text-xs text-gray-600">{author}</span>
           </div>
           {/* Fiyat */}
-          <div className="text-lg font-bold text-[#140342]">${price.toFixed(2)}</div>
+          <div className="text-lg font-bold text-[#140342]">
+            ${price.toFixed(2)}
+          </div>
         </div>
       </div>
     </div>
@@ -169,7 +173,7 @@ const CardList = () => {
     <div className="py-12">
       <div className="container mx-auto">
         {/* Başlık ve Kategoriler */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
           <div>
             <h2 className="text-4xl font-bold text-[#140342]">
               Eğitim ve Hizmetlerimizi Keşfet
@@ -201,7 +205,7 @@ const CardList = () => {
           {filteredCards.map((card) => (
             <div
               key={card.id}
-              className="w-full max-w-[630px] max-h-[210px] mx-auto shadow-md rounded-lg overflow-hidden border border-gray-200"
+              className="w-full max-w-full   mx-auto shadow-md rounded-lg overflow-hidden border border-gray-200"
             >
               <Card {...card} />
             </div>
